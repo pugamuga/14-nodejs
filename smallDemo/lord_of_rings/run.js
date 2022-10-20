@@ -17,14 +17,21 @@ const EventEmitter = require("events");
 
 const myEmitter = new EventEmitter();
 
-const logDBConnection = (data) => {
-    console.log("DB connected "+data) 
-}
+const logDBConnection = (data = null) => {
+  console.log("DB connected " + data);
+};
 
-myEmitter.addListener("once", logDBConnection)
+myEmitter.addListener("once", () => {
+  console.log("DB connected ");
+});
 
-myEmitter.emit("once", "run just once")
-myEmitter.emit("once", "run just once")
-myEmitter.emit("once", "run just once")
+myEmitter.prependListener("once", () => {
+  console.log("prepend");
+});
+myEmitter.emit("once", "data for once");
 
+myEmitter.addListener("error", (err) => {
+  console.log("Error is invoke " + err.message);
+});
 
+myEmitter.emit("error", new Error("Boom!"))
